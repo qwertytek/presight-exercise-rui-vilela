@@ -4,6 +4,7 @@
   "repository": "",
   "author": "",
   "license": "MIT",
+  "private": true,
   "workspaces": [
     "client",
     "server"
