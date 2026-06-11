@@ -1,5 +1,9 @@
 # Presight Frontend Exercise
 
+## Candidate Notes
+
+## Excercise Notes
+
 Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
 
 The application should include:
@@ -9,13 +13,13 @@ The application should include:
 - A SQLite database used as the source of truth for user data.
 - Docker configuration for running the application locally.
 
-## Scenario
+### Scenario
 
 Users need to browse a large directory of people, search by name, and narrow results by nationality and hobbies. The filter sidebar should help users discover useful filters based on the result set they are currently viewing.
 
-## Requirements
+### Requirements
 
-### Data Model
+#### Data Model
 
 Seed a SQLite database with enough records to make pagination, infinite scroll, search, and filter counts meaningful.
 
@@ -32,7 +36,7 @@ Choose a data model that supports the required behavior.
 
 SQLite must be the persisted source of user data.
 
-### API
+#### API
 
 Expose an API that supports:
 
@@ -58,7 +62,7 @@ Sorting semantics:
 - Sorted results must be deterministic. Use `id` as a final tie-breaker when values are equal.
 - Pagination must respect the active sort without duplicate or missing users.
 
-### Client
+#### Client
 
 Build a React interface that includes:
 
@@ -92,13 +96,13 @@ When the text filter or selected filters change, the client must refresh both:
 
 The text filter value, selected hobbies, selected nationalities, sort field, and sort direction must be reflected in the URL query string. Reloading or sharing the URL should restore the same view state.
 
-## Implementation Notes
+### Implementation Notes
 
 - Keep the database setup easy to run locally.
 - Include seed logic or a documented command that creates the SQLite database.
 - Include a `Dockerfile` and `docker-compose.yml` that can run the application locally.
 
-## Evaluation Focus
+### Evaluation Focus
 
 We will pay particular attention to:
 
@@ -109,7 +113,7 @@ We will pay particular attention to:
 - Clear loading, empty, and error states.
 - Easy local and Docker-based setup.
 
-## Deliverables
+### Deliverables
 
 Please provide:
 
