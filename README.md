@@ -2,6 +2,18 @@
 
 ## Candidate Notes
 
+The project will be organized using feature branches, each representing a specific part of the development process. Once completed, branches will be merged into main and retained to preserve a full history of development stages and enable easy review of progress.
+
+### feature/setup
+
+The purpose of this feature is to establish the initial project setup, including the core tooling, folder structure, and development environment configuration. This ensures a consistent foundation for future development and makes it easier to scale and maintain the project over time.
+
+#### commitlint + husky
+
+This setup enforces consistent commit messages and pre-commit checks. It helps maintain a clean Git history by validating commit formats and preventing invalid commits from being pushed.
+
+More details: [commitlint docs](https://commitlint.js.org/)
+
 ## Excercise Notes
 
 Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
