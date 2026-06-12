@@ -1,13 +1,18 @@
 {
-  "name": "presight-server",
+  "name": "server",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
   "dependencies": {
-    "express": "~5.1.0"
+    "express": "^5.2.1"
   },
   "devDependencies": {
-    "@types/express": "~5.0.1",
-    "@types/node-fetch": "~2.6.12"
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.3",
+    "@types/node-fetch": "~2.6.12",
+    "ts-node-dev": "^2.0.0"
   }
 }
