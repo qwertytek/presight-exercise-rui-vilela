@@ -26,6 +26,22 @@ As the application grows in complexity, introducing a tsconfig.base.json becomes
 
 More details: [typescript docs](https://www.typescriptlang.org/docs/)
 
+#### Eslint + Prettier + Lint-staged
+
+ESLint is used for static analysis and enforcing consistent code quality rules across the codebase. A shared eslint.base.cjs configuration defines the core rules and is inherited by each workspace, allowing per-package overrides while keeping a consistent baseline.
+
+More details: [eslint docs](https://eslint.org/)
+
+Prettier handles automatic code formatting to ensure a uniform style across all files, independent of developer or editor preferences.
+
+More details: [prettier docs](https://prettier.io/)
+
+lint-staged runs ESLint and Prettier only on staged files before commits, ensuring only changed code is validated and formatted. It is typically paired with Husky to enforce these checks via Git hooks.
+
+More details: [lint-staged docs](https://github.com/lint-staged/lint-staged)
+
+Together, these tools enforce consistent quality and formatting with minimal overhead.
+
 ## Excercise Notes
 
 Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
