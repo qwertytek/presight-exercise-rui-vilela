@@ -54,6 +54,10 @@ This setup introduces a robust testing environment for the server using Vitest, 
 
 More details: [Vitest docs](https://vitest.dev/) | [Supertest docs](https://github.com/ladjs/supertest)
 
+#### Docker & Docker Compose
+
+Used to standardize the server runtime and eliminate environment inconsistencies across development, testing, and production. Docker Compose orchestrates multi-service setups enabling reproducible local development environments.
+
 ## Excercise Notes
 
 Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
