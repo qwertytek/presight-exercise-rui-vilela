@@ -1,0 +1,16 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    working_dir: /workspace/server
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - .:/workspace
+      - /workspace/node_modules
+    command: yarn workspace server dev
+
+
