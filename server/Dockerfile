@@ -2,7 +2,6 @@ FROM node:22.22.1
 
 WORKDIR /workspace
 
-RUN corepack enable
 RUN corepack enable && corepack prepare yarn@4.16.0 --activate
 
 COPY package.json yarn.lock .yarnrc.yml ./
