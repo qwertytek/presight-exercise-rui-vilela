@@ -42,6 +42,18 @@ More details: [lint-staged docs](https://github.com/lint-staged/lint-staged)
 
 Together, these tools enforce consistent quality and formatting with minimal overhead.
 
+### feature/setup-server
+
+#### Testing
+
+This setup introduces a robust testing environment for the server using Vitest, Supertest, and automated coverage reporting. It ensures that API endpoints, business logic, and integrations are thoroughly validated before code is merged.
+
+- **Vitest:** Used as the primary test runner due to its blazing-fast performance, native TypeScript support, and compatibility with the Vite ecosystem. It provides an efficient watch mode and seamless execution of unit and integration tests.
+- **Supertest:** Integrated to handle HTTP assertions. It allows us to spin up the server in isolation and simulate HTTP requests (e.g., `GET`, `POST`) to test API routes and responses without needing to manually start the full application network layer.
+- **Coverage Reporting:**
+
+More details: [Vitest docs](https://vitest.dev/) | [Supertest docs](https://github.com/ladjs/supertest)
+
 ## Excercise Notes
 
 Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
