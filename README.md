@@ -1,5 +1,49 @@
 # Presight Frontend Exercise
 
+## Candidate Notes
+
+The project will be organized using feature branches, each representing a specific part of the development process. Once completed, branches will be merged into main and retained to preserve a full history of development stages and enable easy review of progress.
+
+### feature/setup
+
+The purpose of this feature is to establish the initial project setup, including the core tooling, folder structure, and development environment configuration. This ensures a consistent foundation for future development and makes it easier to scale and maintain the project over time.
+
+#### commitlint + husky
+
+This setup enforces consistent commit messages and pre-commit checks. It helps maintain a clean Git history by validating commit formats and preventing invalid commits from being pushed.
+
+More details: [commitlint docs](https://commitlint.js.org/)
+
+#### Typescript
+
+TypeScript is used as the primary language for the project to introduce static typing on top of JavaScript. This improves code quality, reduces runtime errors, and makes the codebase easier to refactor and scale.
+
+Considering the project is structured as a monorepo, the root tsconfig.json should avoid enforcing compilerOptions, since these decisions are better handled at the individual workspace level. Each workspace may have different runtime targets, bundlers, or framework requirements, and enforcing a global configuration would reduce flexibility and increase friction when scaling or introducing new packages.
+
+At the initial stage, the root tsconfig.json should only act as a project reference layer, pointing to the individual workspace configurations. This keeps the setup minimal and avoids premature abstraction.
+
+As the application grows in complexity, introducing a tsconfig.base.json becomes a reasonable next step.
+
+More details: [typescript docs](https://www.typescriptlang.org/docs/)
+
+#### Eslint + Prettier + Lint-staged
+
+ESLint is used for static analysis and enforcing consistent code quality rules across the codebase. A shared eslint.base.cjs configuration defines the core rules and is inherited by each workspace, allowing per-package overrides while keeping a consistent baseline.
+
+More details: [eslint docs](https://eslint.org/)
+
+Prettier handles automatic code formatting to ensure a uniform style across all files, independent of developer or editor preferences.
+
+More details: [prettier docs](https://prettier.io/)
+
+lint-staged runs ESLint and Prettier only on staged files before commits, ensuring only changed code is validated and formatted. It is typically paired with Husky to enforce these checks via Git hooks.
+
+More details: [lint-staged docs](https://github.com/lint-staged/lint-staged)
+
+Together, these tools enforce consistent quality and formatting with minimal overhead.
+
+## Excercise Notes
+
 Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
 
 The application should include:
@@ -9,13 +53,13 @@ The application should include:
 - A SQLite database used as the source of truth for user data.
 - Docker configuration for running the application locally.
 
-## Scenario
+### Scenario
 
 Users need to browse a large directory of people, search by name, and narrow results by nationality and hobbies. The filter sidebar should help users discover useful filters based on the result set they are currently viewing.
 
-## Requirements
+### Requirements
 
-### Data Model
+#### Data Model
 
 Seed a SQLite database with enough records to make pagination, infinite scroll, search, and filter counts meaningful.
 
@@ -32,7 +76,7 @@ Choose a data model that supports the required behavior.
 
 SQLite must be the persisted source of user data.
 
-### API
+#### API
 
 Expose an API that supports:
 
@@ -58,7 +102,7 @@ Sorting semantics:
 - Sorted results must be deterministic. Use `id` as a final tie-breaker when values are equal.
 - Pagination must respect the active sort without duplicate or missing users.
 
-### Client
+#### Client
 
 Build a React interface that includes:
 
@@ -92,13 +136,13 @@ When the text filter or selected filters change, the client must refresh both:
 
 The text filter value, selected hobbies, selected nationalities, sort field, and sort direction must be reflected in the URL query string. Reloading or sharing the URL should restore the same view state.
 
-## Implementation Notes
+### Implementation Notes
 
 - Keep the database setup easy to run locally.
 - Include seed logic or a documented command that creates the SQLite database.
 - Include a `Dockerfile` and `docker-compose.yml` that can run the application locally.
 
-## Evaluation Focus
+### Evaluation Focus
 
 We will pay particular attention to:
 
@@ -109,7 +153,7 @@ We will pay particular attention to:
 - Clear loading, empty, and error states.
 - Easy local and Docker-based setup.
 
-## Deliverables
+### Deliverables
 
 Please provide:
 
