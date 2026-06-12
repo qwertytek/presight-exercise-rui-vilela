@@ -14,6 +14,18 @@ This setup enforces consistent commit messages and pre-commit checks. It helps m
 
 More details: [commitlint docs](https://commitlint.js.org/)
 
+#### Typescript
+
+TypeScript is used as the primary language for the project to introduce static typing on top of JavaScript. This improves code quality, reduces runtime errors, and makes the codebase easier to refactor and scale.
+
+Considering the project is structured as a monorepo, the root tsconfig.json should avoid enforcing compilerOptions, since these decisions are better handled at the individual workspace level. Each workspace may have different runtime targets, bundlers, or framework requirements, and enforcing a global configuration would reduce flexibility and increase friction when scaling or introducing new packages.
+
+At the initial stage, the root tsconfig.json should only act as a project reference layer, pointing to the individual workspace configurations. This keeps the setup minimal and avoids premature abstraction.
+
+As the application grows in complexity, introducing a tsconfig.base.json becomes a reasonable next step.
+
+More details: [typescript docs](https://www.typescriptlang.org/docs/)
+
 ## Excercise Notes
 
 Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
