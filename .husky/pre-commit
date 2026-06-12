@@ -1,1 +1,1 @@
-echo "pre-commit hook active"
+yarn tsc --noEmit
