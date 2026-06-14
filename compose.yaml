@@ -1,0 +1,24 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+
+    working_dir: /workspace
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - .:/workspace:cached
+      - /workspace/node_modules
+      - sqlite-data:/data
+
+    environment:
+      DB_PATH: /data/app.db
+      NODE_ENV: development
+
+    command: yarn workspace server dev
+
+volumes:
+  sqlite-data:

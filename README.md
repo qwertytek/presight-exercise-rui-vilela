@@ -42,6 +42,47 @@ More details: [lint-staged docs](https://github.com/lint-staged/lint-staged)
 
 Together, these tools enforce consistent quality and formatting with minimal overhead.
 
+### feature/setup-server
+
+#### Testing
+
+This setup introduces a robust testing environment for the server using Vitest, Supertest, and automated coverage reporting. It ensures that API endpoints, business logic, and integrations are thoroughly validated before code is merged.
+
+- **Vitest:** Used as the primary test runner due to its blazing-fast performance, native TypeScript support, and compatibility with the Vite ecosystem. It provides an efficient watch mode and seamless execution of unit and integration tests.
+- **Supertest:** Integrated to handle HTTP assertions. It allows us to spin up the server in isolation and simulate HTTP requests (e.g., `GET`, `POST`) to test API routes and responses without needing to manually start the full application network layer.
+- **Coverage Reporting:**
+
+More details: [Vitest docs](https://vitest.dev/) | [Supertest docs](https://github.com/ladjs/supertest)
+
+#### Docker & Docker Compose
+
+Used to standardize the server runtime and eliminate environment inconsistencies across development, testing, and production. Docker Compose orchestrates multi-service setups enabling reproducible local development environments.
+
+#### Sqlite
+
+One of the project requirements is to use a sqlite database. When choosing a sqlite database there are a couple of options available:
+
+| Feature              | better-sqlite3                                                                                                                                          | node:sqlite (Built-in)                                                                                                                         | sqlite3 (Legacy)                                                                                                     |
+| :------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------- |
+| **API Style**        | Synchronous (blocking, simple control flow)                                                                                                             | Synchronous (modern built-in API)                                                                                                              | Asynchronous (callbacks / Promises)                                                                                  |
+| **Performance**      | 🏆 Fastest (native C++ bindings, minimal overhead)                                                                                                      | ⚡ Fast (native, slightly higher overhead than direct bindings)                                                                                | 🐢 Slowest (thread pool + async abstraction overhead)                                                                |
+| **Installation**     | `npm install better-sqlite3` (native build)                                                                                                             | No install (built into Node 22+)                                                                                                               | `npm install sqlite3` (native build required)                                                                        |
+| **Setup Friction**   | Low (straightforward import + usage)                                                                                                                    | Medium (requires Node version + `--experimental-sqlite` in some setups)                                                                        | Low (standard npm package)                                                                                           |
+| **Stability**        | ✅ Mature and production-proven                                                                                                                         | ⚠️ Stable-ish but still evolving (newer API surface)                                                                                           | ✅ Mature, widely used legacy standard                                                                               |
+| **Code Readability** | ⭐⭐⭐⭐⭐ (no async/await, minimal boilerplate)                                                                                                        | ⭐⭐⭐⭐⭐ (clean synchronous-style API)                                                                                                       | ⭐⭐⭐ (async patterns add verbosity)                                                                                |
+| **Portability**      | High (works across environments via npm)                                                                                                                | Medium (Node version dependent, feature gated)                                                                                                 | High (works across Node versions)                                                                                    |
+| **Best For**         | High-performance local DB access, backend services, CLI tools, data-heavy logic, and situations where sync execution improves simplicity and throughput | Minimal-dependency applications, modern Node 22+ projects, lightweight embedded DB usage, and environments where built-in tooling is preferred | Legacy systems, async-first architectures, large existing codebases, and compatibility with older Node.js ecosystems |
+
+For the sake of simplicity better-sqlite3 provides the flexibility that fits this exercise.
+
+While ORMs provide features such as schema management, migrations, and query abstractions, they also introduce trade-offs including additional complexity, framework-specific conventions, and an abstraction layer over SQL. For the scope of this exercise, I chose not to assume those trade-offs were justified and instead opted for a simple SQL-first approach.
+
+As a result, a lightweight migration runner was implemented to manage schema evolution. Migrations are defined as SQL files, discovered automatically at startup, executed in order, and tracked through a dedicated migrations table.
+
+Each migration runs inside a transaction, ensuring that both the schema changes and migration record are committed together, preventing partial migration states.
+
+This approach keeps the database layer simple, transparent, and fully under application control while providing reliable schema versioning.
+
 ## Excercise Notes
 
 Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.

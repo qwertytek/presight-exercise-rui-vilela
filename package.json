@@ -29,12 +29,13 @@
     "typescript": "^6.0.3"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
     "*.{json,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "packageManager": "yarn@4.16.0"
 }
