@@ -12,7 +12,8 @@ module.exports = [
       '**/coverage/',
       '**/*.min.js',
       '.config/*',
-      'eslint.config.cjs'
+      'eslint.config.cjs',
+      'commitlint.config.mjs'
     ],
   },
   // BASE CONFIG
