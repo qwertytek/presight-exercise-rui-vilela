@@ -4,15 +4,19 @@
   "main": "",
   "license": "MIT",
   "scripts": {
+    "start": "tsx watch src/server.ts",
     "dev": "tsx watch src/server.ts",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "db:migrate": "tsx src/db/runner.ts"
   },
   "dependencies": {
+    "better-sqlite3": "^12.10.0",
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.6",
     "@types/node": "^25.9.3",
     "@types/node-fetch": "~2.6.12",

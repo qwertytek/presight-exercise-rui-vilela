@@ -26,6 +26,12 @@ start.sh
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.yarn
 
 .parcel-cache
 .idea/
+
+# database
+*.db
+*.db-shm
+*.db-wal
