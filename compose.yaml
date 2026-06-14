@@ -7,7 +7,7 @@ services:
     working_dir: /workspace
 
     ports:
-      - "3000:3000"
+      - '3000:3000'
 
     volumes:
       - .:/workspace:cached
