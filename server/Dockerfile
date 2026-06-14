@@ -10,7 +10,7 @@ COPY .yarn .yarn
 COPY server/package.json server/package.json
 COPY client/package.json client/package.json
 
-RUN yarn install
+RUN yarn install --immutable
 
 COPY . .
 
