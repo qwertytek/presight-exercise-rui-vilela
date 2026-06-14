@@ -48,6 +48,7 @@ export const runMigrations = (db: DatabaseType) => {
     try {
       runMigration(file, sql);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(`Migration failed: ${file}`);
       throw err;
     }
