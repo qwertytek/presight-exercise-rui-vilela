@@ -6,4 +6,8 @@ export class UserService {
   list(page: number, limit: number) {
     return this.repo.findAll({ page, limit });
   }
+
+  getById(id: number) {
+    return this.repo.getById({ id });
+  }
 }

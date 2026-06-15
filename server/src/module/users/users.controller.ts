@@ -16,3 +16,17 @@ export const listUsers = async (req: Request, res: Response) => {
 
   res.json(response);
 };
+
+export const getUsersById = async (req: Request, res: Response) => {
+  const userId = req?.params?.id;
+
+  const row = service.getById(Number(userId)) as { data: string };
+  const data = JSON.parse(row.data);
+
+  const response = {
+    data,
+    hobby_count: data?.hobbies?.length,
+  };
+
+  return res.json(response);
+};
