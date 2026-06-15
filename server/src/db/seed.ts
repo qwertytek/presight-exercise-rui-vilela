@@ -1,4 +1,4 @@
-import db from './index';
+import { db } from './index';
 import nationalities from './seeds/nationalities.json';
 import fs from 'fs';
 import path from 'path';
