@@ -7,7 +7,7 @@ services:
     working_dir: /workspace
 
     ports:
-      - "3000:3000"
+      - '3000:3000'
 
     volumes:
       - .:/workspace:cached
@@ -19,6 +19,25 @@ services:
       NODE_ENV: development
 
     command: yarn workspace server dev
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+
+    working_dir: /workspace
+
+    ports:
+      - '5173:5173'
+
+    volumes:
+      - .:/workspace:cached
+      - /workspace/node_modules
+
+    environment:
+      NODE_ENV: development
+
+    command: yarn workspace client dev --host
 
 volumes:
   sqlite-data:

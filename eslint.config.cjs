@@ -13,7 +13,7 @@ module.exports = [
       '**/*.min.js',
       '.config/*',
       'eslint.config.cjs',
-      'commitlint.config.mjs'
+      'commitlint.config.mjs',
     ],
   },
   // BASE CONFIG
