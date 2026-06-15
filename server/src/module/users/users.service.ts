@@ -10,4 +10,8 @@ export class UserService {
   getById(id: number) {
     return this.repo.getById({ id });
   }
+
+  getUserByQueryName(query: string) {
+    return this.repo.filterNames({ query });
+  }
 }

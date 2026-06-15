@@ -49,4 +49,17 @@ export class UserRepository {
       )
       .get(id);
   }
+
+  filterNames({ query }: { query: string }) {
+    return this.db
+      .prepare(
+        `
+        SELECT u.id, u.first_name, u.last_name
+        FROM users u
+        WHERE u.first_name LIKE '%' || ? || '%'
+        OR u.last_name LIKE '%' || ? || '%'
+      `,
+      )
+      .all(query, query);
+  }
 }

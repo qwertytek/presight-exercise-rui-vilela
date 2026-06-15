@@ -30,3 +30,21 @@ export const getUsersById = async (req: Request, res: Response) => {
 
   return res.json(response);
 };
+
+export const getUsersByNameQuery = async (req: Request, res: Response) => {
+  const query = (req?.query?.q as string) && '';
+
+  if (!query.length) {
+    return res.json({
+      data: [],
+    });
+  }
+
+  const rows = service.getUserByQueryName(query);
+
+  const response = {
+    data: rows,
+  };
+
+  return res.json(response);
+};
