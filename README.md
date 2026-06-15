@@ -75,16 +75,13 @@ One of the project requirements is to use a sqlite database. When choosing a sql
 
 For the sake of simplicity better-sqlite3 provides the flexibility that fits this exercise.
 
-## Excercise Notes
+While ORMs provide features such as schema management, migrations, and query abstractions, they also introduce trade-offs including additional complexity, framework-specific conventions, and an abstraction layer over SQL. For the scope of this exercise, I chose not to assume those trade-offs were justified and instead opted for a simple SQL-first approach.
 
-Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
+As a result, a lightweight migration runner was implemented to manage schema evolution. Migrations are defined as SQL files, discovered automatically at startup, executed in order, and tracked through a dedicated migrations table.
 
-The application should include:
+Each migration runs inside a transaction, ensuring that both the schema changes and migration record are committed together, preventing partial migration states.
 
-- A React client.
-- A Node.js API server.
-- A SQLite database used as the source of truth for user data.
-- Docker configuration for running the application locally.
+This approach keeps the database layer simple, transparent, and fully under application control while providing reliable schema versioning.
 
 ### feature/setup-client
 
@@ -99,6 +96,17 @@ This approach keeps the monorepo root as the single source of truth for shared c
 Tailwind is chosen for this project to keep styling minimal, consistent, and low-overhead. It avoids the need for custom CSS architecture or additional styling abstractions, which would add unnecessary complexity for the current scope.
 
 More details: [tailwind docs](https://tailwindcss.com/)
+
+## Excercise Notes
+
+Build a small full-stack user directory application. The goal is to evaluate how you design a searchable, filterable, paginated UI backed by persisted data and clear API boundaries.
+
+The application should include:
+
+- A React client.
+- A Node.js API server.
+- A SQLite database used as the source of truth for user data.
+- Docker configuration for running the application locally.
 
 ### Scenario
 

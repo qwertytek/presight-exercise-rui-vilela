@@ -2020,12 +2020,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^19.2.3":
-  version: 19.2.3
-  resolution: "@types/react-dom@npm:19.2.3"
+"@types/react-dom@npm:~19.1.2":
+  version: 19.1.11
+  resolution: "@types/react-dom@npm:19.1.11"
   peerDependencies:
-    "@types/react": ^19.2.0
-  checksum: 10c0/b486ebe0f4e2fb35e2e108df1d8fc0927ca5d6002d5771e8a739de11239fe62d0e207c50886185253c99eb9dedfeeb956ea7429e5ba17f6693c7acb4c02f8cd1
+    "@types/react": ^19.0.0
+  checksum: 10c0/417da6414f43ea2e416ab19666f78f8a29b349f4273ee6d8d468516606c65ee0e6f31939cd3255dfaf466a50a5cdf16b6fd988cf7e9aaf678c61d1fff81e5c20
   languageName: node
   linkType: hard
 
@@ -2050,12 +2050,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^19.2.17":
+"@types/react@npm:*":
   version: 19.2.17
   resolution: "@types/react@npm:19.2.17"
   dependencies:
     csstype: "npm:^3.2.2"
   checksum: 10c0/bc2c4af96b3e480604424de70d5ebda90c5f4b485df471858c0bc2d7d70364b606ec3c4d8579f94f01aa0c6c0591f56bcf14cba5689f5eea4b74250ccdc3a232
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:~19.1.0":
+  version: 19.1.17
+  resolution: "@types/react@npm:19.1.17"
+  dependencies:
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/8a8369ea00fc961f0884be4d1da4a039b2b6445de9c8b690ed0ebe15acfb0b1f27005278fef1fe39a1722a30f4415778b790d0089e2b30019371c61355ea316f
   languageName: node
   linkType: hard
 
@@ -2232,24 +2241,6 @@ __metadata:
     "@typescript-eslint/types": "npm:8.61.0"
     eslint-visitor-keys: "npm:^5.0.0"
   checksum: 10c0/5b656aed426a92dfc9a481f0bf535ceb47321303f476f32ba979f73423c739b51d7a5ad76c81d7be9df0a9beb361f4a11ff530dd86d59f41b89bb5f09af7be9f
-  languageName: node
-  linkType: hard
-
-"@vitejs/plugin-react@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@vitejs/plugin-react@npm:6.0.2"
-  dependencies:
-    "@rolldown/pluginutils": "npm:^1.0.0"
-  peerDependencies:
-    "@rolldown/plugin-babel": ^0.1.7 || ^0.2.0
-    babel-plugin-react-compiler: ^1.0.0
-    vite: ^8.0.0
-  peerDependenciesMeta:
-    "@rolldown/plugin-babel":
-      optional: true
-    babel-plugin-react-compiler:
-      optional: true
-  checksum: 10c0/6e2d90974e05f2a9aefafad1d137b75c3b3b4bf3f2affdbfe77c6b11b24832cff22dd8852430c6341e2fb5b00a4513fb00db306a6abdbec6f0f5841e93bbcfba
   languageName: node
   linkType: hard
 
@@ -2672,14 +2663,14 @@ __metadata:
   linkType: hard
 
 "axios@npm:^1.8.3":
-  version: 1.17.0
-  resolution: "axios@npm:1.17.0"
+  version: 1.18.0
+  resolution: "axios@npm:1.18.0"
   dependencies:
     follow-redirects: "npm:^1.16.0"
     form-data: "npm:^4.0.5"
     https-proxy-agent: "npm:^5.0.1"
     proxy-from-env: "npm:^2.1.0"
-  checksum: 10c0/c4fa19ff3a3a63bde48beec03ad816b133b9a6385cccffffe172577ab18c6a70e299280d57f12c80c867fe25df41f92cb91d3a8258708a6d2be3e9e085f92650
+  checksum: 10c0/f88aae13fd9dd395dea3053c7299178fee62f436f20424a1d6d79ec11ffb7656ba664b4630defbadab2c387b6ea07e29afb9f28b26d8e0e49d45be766983290d
   languageName: node
   linkType: hard
 
@@ -3019,29 +3010,6 @@ __metadata:
   checksum: 10c0/125a62810e59a2564268c80fdff56c23159a7690c003e34aeb2e68497dccff26911998ff49c33916fcfdf71e824322cc3953e3f7b48b27267c7a062c81348a9a
   languageName: node
   linkType: hard
-
-"client@workspace:client":
-  version: 0.0.0-use.local
-  resolution: "client@workspace:client"
-  dependencies:
-    "@tailwindcss/postcss": "npm:~4.1.3"
-    "@tailwindcss/vite": "npm:^4.3.1"
-    "@types/react": "npm:^19.2.17"
-    "@types/react-dom": "npm:^19.2.3"
-    "@types/react-router": "npm:~5.1.20"
-    "@types/react-router-dom": "npm:~5.3.3"
-    "@vitejs/plugin-react": "npm:^6.0.2"
-    postcss: "npm:~8.5.3"
-    prettier: "npm:~3.5.3"
-    react: "npm:^19.2.7"
-    react-dom: "npm:^19.2.7"
-    react-router: "npm:~7.5.0"
-    react-router-dom: "npm:~7.5.0"
-    tailwindcss: "npm:^4.3.1"
-    typescript: "npm:^6.0.3"
-    vite: "npm:^8.0.16"
-  languageName: unknown
-  linkType: soft
 
 "cliui@npm:^7.0.2":
   version: 7.0.4
@@ -3448,7 +3416,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.2.2":
+"csstype@npm:^3.0.2, csstype@npm:^3.2.2":
   version: 3.2.3
   resolution: "csstype@npm:3.2.3"
   checksum: 10c0/cd29c51e70fa822f1cecd8641a1445bed7063697469d35633b516e60fe8c1bde04b08f6c5b6022136bb669b64c63d4173af54864510fbb4ee23281801841a3ce
@@ -3993,7 +3961,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^10.5.0":
+"eslint@npm:^10.4.1":
   version: 10.5.0
   resolution: "eslint@npm:10.5.0"
   dependencies:
@@ -7323,6 +7291,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"presight-client@workspace:client":
+  version: 0.0.0-use.local
+  resolution: "presight-client@workspace:client"
+  dependencies:
+    "@tailwindcss/postcss": "npm:~4.1.3"
+    "@tailwindcss/vite": "npm:^4.3.1"
+    "@types/react": "npm:~19.1.0"
+    "@types/react-dom": "npm:~19.1.2"
+    "@types/react-router": "npm:~5.1.20"
+    "@types/react-router-dom": "npm:~5.3.3"
+    postcss: "npm:~8.5.3"
+    prettier: "npm:~3.5.3"
+    react: "npm:^19.2.7"
+    react-dom: "npm:^19.2.7"
+    react-router: "npm:~7.5.0"
+    tailwindcss: "npm:^4.3.1"
+  languageName: unknown
+  linkType: soft
+
 "presight-execise@workspace:.":
   version: 0.0.0-use.local
   resolution: "presight-execise@workspace:."
@@ -7332,7 +7319,7 @@ __metadata:
     "@eslint/js": "npm:^10.0.1"
     "@typescript-eslint/eslint-plugin": "npm:^8.61.0"
     "@typescript-eslint/parser": "npm:^8.61.0"
-    eslint: "npm:^10.5.0"
+    eslint: "npm:^10.4.1"
     eslint-config-prettier: "npm:^10.1.8"
     globals: "npm:^17.6.0"
     husky: "npm:^9.1.7"
@@ -7549,19 +7536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:~7.5.0":
-  version: 7.5.3
-  resolution: "react-router-dom@npm:7.5.3"
-  dependencies:
-    react-router: "npm:7.5.3"
-  peerDependencies:
-    react: ">=18"
-    react-dom: ">=18"
-  checksum: 10c0/56c03d8c31c100db54029df82f7e2d350ec75d301b2ffa9512fbc7659faf492ef6d777115629da89c92d0826f3b8a98271dd8426fd3afd3aaf9ed92763f7deaa
-  languageName: node
-  linkType: hard
-
-"react-router@npm:7.5.3, react-router@npm:~7.5.0":
+"react-router@npm:~7.5.0":
   version: 7.5.3
   resolution: "react-router@npm:7.5.3"
   dependencies:
@@ -8955,7 +8930,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^6.0.0 || ^7.0.0 || ^8.0.0, vite@npm:^8.0.16":
+"vite@npm:^6.0.0 || ^7.0.0 || ^8.0.0":
   version: 8.0.16
   resolution: "vite@npm:8.0.16"
   dependencies:
