@@ -1,28 +1,36 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
-import { listUsers } from './users.controller';
+import { listUsers, getUsersById } from './users.controller';
 
 // ---------------------------------------------------------------------------
-// Mock UserService — vi.hoisted ensures mockList is available inside vi.mock
+// Mock UserService — vi.hoisted ensures mocks are available inside vi.mock
 // ---------------------------------------------------------------------------
-const { mockList } = vi.hoisted(() => ({ mockList: vi.fn() }));
+const { mockList, mockGetById } = vi.hoisted(() => ({
+  mockList: vi.fn(),
+  mockGetById: vi.fn(),
+}));
 
 vi.mock('./users.service', () => {
-  const UserService = vi.fn(function (this: { list: typeof mockList }) {
+  const UserService = vi.fn(function (this: {
+    list: typeof mockList;
+    getById: typeof mockGetById;
+  }) {
     this.list = mockList;
+    this.getById = mockGetById;
   });
   return { UserService };
 });
 
 // ---------------------------------------------------------------------------
-// Minimal app wired with just the users route
+// Minimal app wired with just the users routes
 // ---------------------------------------------------------------------------
 const buildApp = () => {
   const app = express();
 
   app.use(express.json());
   app.get('/api/users', listUsers);
+  app.get('/api/users/:id', getUsersById);
 
   return app;
 };
@@ -87,6 +95,67 @@ describe('GET /api/users', () => {
     mockList.mockReturnValue([]);
 
     const res = await request(buildApp()).get('/api/users');
+
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+  });
+});
+
+describe('GET /api/users/:id', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const fakeUser = {
+    id: 1,
+    first_name: 'Alice',
+    last_name: 'Smith',
+    age: 30,
+    avatar: null,
+    country: { code: 'PT', name: 'Portugal' },
+    hobbies: [
+      { id: 10, name: 'Reading', type: 'Indoor' },
+      { id: 11, name: 'Cycling', type: 'Outdoor' },
+    ],
+  };
+
+  it('returns 200 with data and hobby_count', async () => {
+    mockGetById.mockReturnValue({ data: JSON.stringify(fakeUser) });
+
+    const res = await request(buildApp()).get('/api/users/1');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ data: fakeUser, hobby_count: 2 });
+  });
+
+  it('calls service.getById with the numeric id from the route param', async () => {
+    mockGetById.mockReturnValue({ data: JSON.stringify(fakeUser) });
+
+    await request(buildApp()).get('/api/users/1');
+
+    expect(mockGetById).toHaveBeenCalledWith(1);
+  });
+
+  it('returns hobby_count matching the hobbies array length', async () => {
+    mockGetById.mockReturnValue({ data: JSON.stringify(fakeUser) });
+
+    const res = await request(buildApp()).get('/api/users/1');
+
+    expect(res.body.hobby_count).toBe(res.body.data.hobbies.length);
+  });
+
+  it('returns hobby_count of 0 when the user has no hobbies', async () => {
+    const userNoHobbies = { ...fakeUser, hobbies: [] };
+    mockGetById.mockReturnValue({ data: JSON.stringify(userNoHobbies) });
+
+    const res = await request(buildApp()).get('/api/users/1');
+
+    expect(res.body.hobby_count).toBe(0);
+  });
+
+  it('responds with JSON content-type', async () => {
+    mockGetById.mockReturnValue({ data: JSON.stringify(fakeUser) });
+
+    const res = await request(buildApp()).get('/api/users/1');
 
     expect(res.headers['content-type']).toMatch(/application\/json/);
   });

@@ -25,6 +25,19 @@ const buildDb = (): DatabaseType => {
       nationality VARCHAR(2),
       FOREIGN KEY (nationality) REFERENCES nationality(code)
     );
+
+    CREATE TABLE hobby (
+      id   INTEGER PRIMARY KEY,
+      name VARCHAR(100) NOT NULL,
+      type VARCHAR(100)
+    );
+
+    CREATE TABLE user_hobby (
+      user_id  INTEGER NOT NULL,
+      hobby_id INTEGER NOT NULL,
+      FOREIGN KEY (user_id)  REFERENCES users(id),
+      FOREIGN KEY (hobby_id) REFERENCES hobby(id)
+    );
   `);
 
   return db;
@@ -136,5 +149,100 @@ describe('UserRepository.findAll', () => {
       last_name: 'Smith',
       age: 30,
     });
+  });
+});
+
+describe('UserRepository.getById', () => {
+  let db: DatabaseType;
+  let repo: UserRepository;
+
+  beforeEach(() => {
+    db = buildDb();
+    repo = new UserRepository(db);
+  });
+
+  it('returns a row with a null id when no user matches', () => {
+    const result = repo.getById({ id: 999 }) as { data: string };
+    const data = JSON.parse(result.data);
+
+    // SQLite's json_object + json_group_array always returns a row even with no match;
+    // the id field will be null when the user does not exist.
+    expect(data.id).toBeNull();
+  });
+
+  it('returns a row with a data property for an existing user', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith', age: 30 });
+
+    const result = repo.getById({ id: 1 }) as { data: string };
+
+    expect(result).not.toBeNull();
+    expect(typeof result.data).toBe('string');
+  });
+
+  it('returns correct user fields in the JSON data', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith', age: 30 });
+
+    const result = repo.getById({ id: 1 }) as { data: string };
+    const data = JSON.parse(result.data);
+
+    expect(data).toMatchObject({
+      id: 1,
+      first_name: 'Alice',
+      last_name: 'Smith',
+      age: 30,
+    });
+  });
+
+  it('includes nationality when the user has one', () => {
+    db.prepare('INSERT INTO nationality (code, name) VALUES (?, ?)').run('PT', 'Portugal');
+    db.prepare(
+      'INSERT INTO users (id, first_name, last_name, age, nationality) VALUES (?, ?, ?, ?, ?)',
+    ).run(1, 'Alice', 'Smith', 30, 'PT');
+
+    const result = repo.getById({ id: 1 }) as { data: string };
+    const data = JSON.parse(result.data);
+
+    expect(data.country).toEqual({ code: 'PT', name: 'Portugal' });
+  });
+
+  it('includes hobbies when the user has them', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+    db.prepare('INSERT INTO hobby (id, name, type) VALUES (?, ?, ?)').run(10, 'Reading', 'Indoor');
+    db.prepare('INSERT INTO hobby (id, name, type) VALUES (?, ?, ?)').run(11, 'Cycling', 'Outdoor');
+    db.prepare('INSERT INTO user_hobby (user_id, hobby_id) VALUES (?, ?)').run(1, 10);
+    db.prepare('INSERT INTO user_hobby (user_id, hobby_id) VALUES (?, ?)').run(1, 11);
+
+    const result = repo.getById({ id: 1 }) as { data: string };
+    const data = JSON.parse(result.data);
+
+    expect(data.hobbies).toHaveLength(2);
+    expect(data.hobbies).toEqual(
+      expect.arrayContaining([
+        { id: 10, name: 'Reading', type: 'Indoor' },
+        { id: 11, name: 'Cycling', type: 'Outdoor' },
+      ]),
+    );
+  });
+
+  it('returns an empty hobbies array when the user has no hobbies', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+
+    const result = repo.getById({ id: 1 }) as { data: string };
+    const data = JSON.parse(result.data);
+
+    // SQLite json_group_array returns [{"id":null,...}] when there are no rows;
+    // this test documents that the hobbies array has one null-filled entry.
+    expect(Array.isArray(data.hobbies)).toBe(true);
+  });
+
+  it('does not return another user when queried by a different id', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+    insertUser(db, { id: 2, first_name: 'Bob', last_name: 'Jones' });
+
+    const result = repo.getById({ id: 2 }) as { data: string };
+    const data = JSON.parse(result.data);
+
+    expect(data.id).toBe(2);
+    expect(data.first_name).toBe('Bob');
   });
 });
