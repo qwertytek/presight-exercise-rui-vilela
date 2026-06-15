@@ -1,5 +1,59 @@
 # Presight Frontend Exercise
 
+## How to run this project
+
+### Run in Docker
+
+#### Start project
+
+```code
+docker compose up -d
+```
+
+#### run migrations and seeds
+
+##### Single run
+
+```code
+docker compose exec server yarn workspace server db:migrate:seed
+```
+
+##### Separate seed and migration execution
+
+```code
+docker compose exec server yarn workspace server db:migrate
+```
+
+#### run seeds
+
+```code
+docker compose exec server yarn workspace server db:seed
+```
+
+#### Server host
+
+```code
+http://localhost:3000/
+```
+
+#### Client host
+
+```code
+http://localhost:5173/
+```
+
+#### delete volumes and shutdown container
+
+```code
+docker compose down -v
+```
+
+#### Destroy images as well
+
+```code
+docker compose down -v --rmi local
+```
+
 ## Candidate Notes
 
 The project will be organized using feature branches, each representing a specific part of the development process. Once completed, branches will be merged into main and retained to preserve a full history of development stages and enable easy review of progress.
