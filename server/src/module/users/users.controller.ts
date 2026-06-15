@@ -32,7 +32,7 @@ export const getUsersById = async (req: Request, res: Response) => {
 };
 
 export const getUsersByNameQuery = async (req: Request, res: Response) => {
-  const query = (req?.query?.q as string) && '';
+  const query = (req?.query?.q as string) || '';
 
   if (!query.length) {
     return res.json({

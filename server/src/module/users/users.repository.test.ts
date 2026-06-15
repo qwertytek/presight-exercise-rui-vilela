@@ -152,6 +152,111 @@ describe('UserRepository.findAll', () => {
   });
 });
 
+describe('UserRepository.filterNames', () => {
+  let db: DatabaseType;
+  let repo: UserRepository;
+
+  beforeEach(() => {
+    db = buildDb();
+    repo = new UserRepository(db);
+  });
+
+  it('returns an empty array when there are no users', () => {
+    const result = repo.filterNames({ query: 'Alice' });
+
+    expect(result).toEqual([]);
+  });
+
+  it('returns an empty array when no users match the query', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+
+    const result = repo.filterNames({ query: 'xyz' });
+
+    expect(result).toEqual([]);
+  });
+
+  it('matches on first_name', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+    insertUser(db, { id: 2, first_name: 'Bob', last_name: 'Jones' });
+
+    const result = repo.filterNames({ query: 'Alice' }) as { id: number }[];
+
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe(1);
+  });
+
+  it('matches on last_name', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+    insertUser(db, { id: 2, first_name: 'Bob', last_name: 'Jones' });
+
+    const result = repo.filterNames({ query: 'Jones' }) as { id: number }[];
+
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe(2);
+  });
+
+  it('is case-insensitive for first_name', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+
+    const result = repo.filterNames({ query: 'alice' });
+
+    expect(result).toHaveLength(1);
+  });
+
+  it('is case-insensitive for last_name', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+
+    const result = repo.filterNames({ query: 'SMITH' });
+
+    expect(result).toHaveLength(1);
+  });
+
+  it('performs a partial (substring) match on first_name', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+
+    const result = repo.filterNames({ query: 'lic' });
+
+    expect(result).toHaveLength(1);
+  });
+
+  it('performs a partial (substring) match on last_name', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+
+    const result = repo.filterNames({ query: 'mit' });
+
+    expect(result).toHaveLength(1);
+  });
+
+  it('returns all matching users when multiple users match', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith' });
+    insertUser(db, { id: 2, first_name: 'Alicia', last_name: 'Jones' });
+    insertUser(db, { id: 3, first_name: 'Bob', last_name: 'Jones' });
+
+    const result = repo.filterNames({ query: 'Ali' }) as { id: number }[];
+
+    expect(result).toHaveLength(2);
+    expect(result.map((u) => u.id)).toEqual(expect.arrayContaining([1, 2]));
+  });
+
+  it('returns id, first_name and last_name fields only', () => {
+    insertUser(db, { id: 1, first_name: 'Alice', last_name: 'Smith', age: 30 });
+
+    const [user] = repo.filterNames({ query: 'Alice' }) as Record<string, unknown>[];
+
+    expect(Object.keys(user).sort()).toEqual(['first_name', 'id', 'last_name']);
+  });
+
+  it('returns a user that matches on either first_name or last_name', () => {
+    insertUser(db, { id: 1, first_name: 'Sam', last_name: 'Samson' });
+
+    const result = repo.filterNames({ query: 'Sam' }) as { id: number }[];
+
+    // Only one row should be returned even though both columns match
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe(1);
+  });
+});
+
 describe('UserRepository.getById', () => {
   let db: DatabaseType;
   let repo: UserRepository;
