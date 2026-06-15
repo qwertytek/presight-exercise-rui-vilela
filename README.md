@@ -137,6 +137,8 @@ Each migration runs inside a transaction, ensuring that both the schema changes 
 
 This approach keeps the database layer simple, transparent, and fully under application control while providing reliable schema versioning.
 
+<img width="937" height="893" alt="Screenshot 2026-06-15 at 20 25 22" src="https://github.com/user-attachments/assets/863b8c77-e068-4e48-b041-f1c5a36afc28" />
+
 ### feature/setup-client
 
 #### Vite + React + Typescript
