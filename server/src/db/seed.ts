@@ -1,11 +1,8 @@
 import db from './index';
-import { initDb } from './index';
 import nationalities from './seeds/nationalities.json';
 import fs from 'fs';
 import path from 'path';
 import users from './seeds/users.json';
-
-initDb(db);
 
 const seed = db.transaction(() => {
   // NATIONALITIES
