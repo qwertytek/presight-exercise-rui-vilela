@@ -86,6 +86,20 @@ The application should include:
 - A SQLite database used as the source of truth for user data.
 - Docker configuration for running the application locally.
 
+### feature/setup-client
+
+#### Vite + React + Typescript
+
+The client is intentionally kept minimal to fit the current monorepo structure and avoid introducing duplicate or conflicting TypeScript configuration. It starts as a lightweight React setup, with complexity added incrementally as needed, rather than relying on create-vite-app, which includes unnecessary defaults and overlaps with existing root-level tooling such as TypeScript and ESLint.
+
+This approach keeps the monorepo root as the single source of truth for shared configuration and ensures the client remains aligned with project-specific requirements instead of generic scaffolding.
+
+#### Tailwind
+
+Tailwind is chosen for this project to keep styling minimal, consistent, and low-overhead. It avoids the need for custom CSS architecture or additional styling abstractions, which would add unnecessary complexity for the current scope.
+
+More details: [tailwind docs](https://tailwindcss.com/)
+
 ### Scenario
 
 Users need to browse a large directory of people, search by name, and narrow results by nationality and hobbies. The filter sidebar should help users discover useful filters based on the result set they are currently viewing.
