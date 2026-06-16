@@ -7,7 +7,8 @@ export const listUsers = async (req: Request, res: Response) => {
   const page = Number(req?.query?.page || 1);
   const limit = Number(req?.query?.limit || 20);
 
-  const data = service.list(page, limit);
+  const rows = service.list(page, limit) as { data: string }[];
+  const data = rows.map((row) => JSON.parse(row.data));
 
   const response = {
     data,
@@ -40,10 +41,10 @@ export const getUsersByNameQuery = async (req: Request, res: Response) => {
     });
   }
 
-  const rows = service.getUserByQueryName(query);
+  const rows = service.getUserByQueryName(query) as { data: string }[];
 
   const response = {
-    data: rows,
+    data: rows.map((row) => JSON.parse(row.data)),
   };
 
   return res.json(response);

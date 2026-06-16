@@ -46,14 +46,18 @@ export function UserLists() {
   return (
     <div className="space-y-2">
       {users.map(
-        ({ avatar, first_name, last_name, age, nationality }: UserProps, index: number) => (
+        (
+          { avatar, first_name, last_name, age, nationality, hobbies }: UserProps,
+          index: number,
+        ) => (
           <UserCard
             key={`${first_name}-${last_name}-${index}`}
             avatarUrl={avatar}
             firstName={first_name}
             lastName={last_name}
-            nationality={nationality}
+            nationality={nationality.name}
             age={age}
+            hobbies={hobbies.map((h) => h.name)}
           />
         ),
       )}

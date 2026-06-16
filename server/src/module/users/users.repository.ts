@@ -10,9 +10,31 @@ export class UserRepository {
     return this.db
       .prepare(
         `
-            SELECT * FROM users
-            ORDER BY id
-            LIMIT ? OFFSET ?
+          SELECT json_object(
+            'id', u.id,
+            'first_name', u.first_name,
+            'last_name', u.last_name,
+            'avatar', u.avatar,
+            'age', u.age,
+            'nationality', json_object(
+              'code', n.code,
+              'name', n.name
+            ),
+            'hobbies', json_group_array(
+              json_object(
+                'id', uh.hobby_id,
+                'name', h.name,
+                'type', h.type
+              )
+            )
+          ) as data
+          FROM users u
+          LEFT JOIN nationality n ON n.code = u.nationality
+          LEFT JOIN user_hobby uh ON uh.user_id = u.id
+          LEFT JOIN hobby h ON uh.hobby_id = h.id
+          GROUP BY u.id
+          ORDER BY u.id
+          LIMIT ? OFFSET ?
         `,
       )
       .all(Number(limit), offset);
@@ -54,10 +76,31 @@ export class UserRepository {
     return this.db
       .prepare(
         `
-        SELECT u.id, u.first_name, u.last_name, u.avatar, u.age, u.nationality
+        SELECT json_object(
+          'id', u.id,
+          'first_name', u.first_name,
+          'last_name', u.last_name,
+          'avatar', u.avatar,
+          'age', u.age,
+          'nationality', json_object(
+            'code', n.code,
+            'name', n.name
+          ),
+          'hobbies', json_group_array(
+            json_object(
+              'id', uh.hobby_id,
+              'name', h.name,
+              'type', h.type
+            )
+          )
+        ) as data
         FROM users u
+        LEFT JOIN nationality n ON n.code = u.nationality
+        LEFT JOIN user_hobby uh ON uh.user_id = u.id
+        LEFT JOIN hobby h ON uh.hobby_id = h.id
         WHERE u.first_name LIKE '%' || ? || '%'
         OR u.last_name LIKE '%' || ? || '%'
+        GROUP BY u.id
       `,
       )
       .all(query, query);

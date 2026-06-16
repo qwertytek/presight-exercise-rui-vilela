@@ -6,13 +6,25 @@ interface getUsersProps {
   page?: number;
 }
 
+export interface NationalityProps {
+  code: string;
+  name: string;
+}
+
+export interface HobbyProps {
+  id: number;
+  name: string;
+  type: string;
+}
+
 export interface UserProps {
   id: number;
   avatar: string;
   first_name: string;
   last_name: string;
   age: number;
-  nationality: string;
+  nationality: NationalityProps;
+  hobbies: HobbyProps[];
 }
 
 interface UsersResponse {
