@@ -186,11 +186,29 @@ Unlike hobbies, nationality is modeled as a one-to-one relationship and therefor
 
 Seed data was generated using publicly available datasets for both nationalities and hobbies to ensure realistic and standardized input values.
 
-For nationalities, the dataset is based on the [ISO 3166-1 alpha-2](https://gist.github.com/ssskip/5a94bfcd2835bf1dea52.) standard, retrieved in JSON format from. This provides a consistent and widely accepted reference for country codes and country names.
+For nationalities, the dataset is based on the [ISO 3166-1 alpha-2](https://gist.github.com/ssskip/5a94bfcd2835bf1dea52) standard, retrieved in JSON format from. This provides a consistent and widely accepted reference for country codes and country names.
 
 For hobbies, a [public Kaggle](https://www.kaggle.com/datasets/mrhell/list-of-hobbies) dataset was used, available in CSV format. This dataset was used to populate a structured and diverse set of hobby entries.
 
 User data was artificially generated using AI, leveraging the nationality and hobby datasets to ensure consistent, realistic, and coherent relationships across all seeded records.
+
+### feature/api
+
+### Users API
+
+This initial API feature focuses on user-related operations:
+
+- `GET /`
+  Returns all users with default pagination (first 20 users).
+
+- `GET /filter-name`
+  Filters users by `first_name` or `last_name`.
+  Requires a `q` query parameter.
+
+- `GET /:id`
+  Returns a specific user by ID, including their associated hobbies and nationality.
+
+By default, user responses only include basic user data. Related entities such as hobbies and nationality are not included unless explicitly requested via the `/:id` endpoint. This design reduces unnecessary data loading and improves performance by avoiding over-fetching.
 
 ## Excercise Notes
 
