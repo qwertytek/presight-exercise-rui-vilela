@@ -15,9 +15,6 @@ export function UserCard({
   age,
   hobbies = [],
 }: UserCardProps) {
-  const visibleHobbies = hobbies.slice(0, 2);
-  const extraCount = hobbies.length - visibleHobbies.length;
-
   return (
     <div className="w-full max-w-md rounded-xl border border-neutral-700/40 bg-neutral-800/30 p-4 shadow-sm backdrop-blur-md">
       {/* Top row */}
@@ -46,8 +43,8 @@ export function UserCard({
       <div className="h-6" />
 
       {/* Bottom row (hobbies) */}
-      <div className="flex items-center justify-center gap-2 text-xs">
-        {visibleHobbies.map((hobby) => (
+      <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
+        {hobbies.map((hobby) => (
           <span
             key={hobby}
             className="rounded-full border border-neutral-700/40 bg-neutral-800/40 px-2 py-1 text-neutral-300"
@@ -55,8 +52,6 @@ export function UserCard({
             {hobby}
           </span>
         ))}
-
-        {extraCount > 0 && <span className="text-neutral-500">+{extraCount}</span>}
       </div>
     </div>
   );
