@@ -54,7 +54,7 @@ export class UserRepository {
     return this.db
       .prepare(
         `
-        SELECT u.id, u.first_name, u.last_name
+        SELECT u.id, u.first_name, u.last_name, u.avatar, u.age, u.nationality
         FROM users u
         WHERE u.first_name LIKE '%' || ? || '%'
         OR u.last_name LIKE '%' || ? || '%'

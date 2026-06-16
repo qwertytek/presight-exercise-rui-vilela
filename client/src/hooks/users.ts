@@ -6,7 +6,7 @@ interface getUsersProps {
   page?: number;
 }
 
-interface UserProps {
+export interface UserProps {
   id: number;
   avatar: string;
   first_name: string;
@@ -25,5 +25,13 @@ export function useUsers({ limit = 0, page }: getUsersProps = {}) {
   return useQuery<UsersResponse>({
     queryKey: ['users', limit, page],
     queryFn: () => apiClient('users', params),
+  });
+}
+
+export function useUsersByName(query: string) {
+  return useQuery<UsersResponse>({
+    queryKey: ['users', 'filter-name', query],
+    queryFn: () => apiClient('users/filter-name', { params: { q: query } }),
+    enabled: query.trim().length > 0,
   });
 }
