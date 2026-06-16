@@ -16,7 +16,7 @@ export function UserCard({
   hobbies = [],
 }: UserCardProps) {
   return (
-    <div className="w-full max-w-md rounded-xl border border-neutral-700/40 bg-neutral-800/30 p-4 shadow-sm backdrop-blur-md">
+    <div className="w-full rounded-xl border border-neutral-700/40 bg-neutral-800/30 p-4 shadow-sm backdrop-blur-md">
       {/* Top row */}
       <div className="flex items-center gap-4">
         <img
@@ -30,7 +30,7 @@ export function UserCard({
             {firstName} {lastName}
           </div>
 
-          <div className="text-xs text-neutral-400">{age}</div>
+          <div className="text-xs text-neutral-400">Age: {age}</div>
         </div>
       </div>
 

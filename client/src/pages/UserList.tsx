@@ -1,9 +1,11 @@
 import { useUsers, useUsersByName, type UserProps } from '../hooks/users';
 import { UserCard } from '../ui/users/UserCard';
-import { LayoutLoadingState } from '../ui/states/LayoutLoadingState';
+import { UserCardSkeleton } from '../ui/users/UserCardSkeleton';
 import { LayoutErrorState } from '../ui/states/LayoutErrorState';
 import { LayoutEmptyState } from '../ui/states/LayoutEmptyState';
 import { useSearch } from '../providers/SearchProvider';
+
+const SKELETON_COUNT = 5;
 
 export function UserLists() {
   const { searchQuery } = useSearch();
@@ -14,10 +16,6 @@ export function UserLists() {
 
   const { data, isLoading, isError, error, refetch } = isSearching ? filteredUsers : allUsers;
 
-  if (isLoading) {
-    return <LayoutLoadingState title="Loading users" subtitle="Fetching user list..." />;
-  }
-
   if (isError) {
     return (
       <LayoutErrorState
@@ -25,6 +23,16 @@ export function UserLists() {
         description={error instanceof Error ? error.message : 'Unknown error'}
         retry={<button onClick={() => refetch()}>Retry</button>}
       />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl mx-auto">
+        {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+          <UserCardSkeleton key={i} />
+        ))}
+      </div>
     );
   }
 
@@ -44,7 +52,7 @@ export function UserLists() {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl mx-auto">
       {users.map(
         (
           { avatar, first_name, last_name, age, nationality, hobbies }: UserProps,
