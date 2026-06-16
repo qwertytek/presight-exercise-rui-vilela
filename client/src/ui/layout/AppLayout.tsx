@@ -8,11 +8,11 @@ export function AppLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen bg-neutral-900 text-neutral-200 antialiased selection:bg-indigo-500/30 overflow-hidden">
+    <div className="h-screen bg-neutral-700 text-neutral-200 antialiased selection:bg-indigo-500/30 overflow-hidden">
       {/* Main layout container with full viewport constraints */}
       <div className="mx-auto max-w-7xl h-full p-6 flex flex-col space-y-5">
         {/* Filters Header */}
-        <header className="flex-shrink-0 rounded-xl border border-neutral-700/40 bg-neutral-800/40 p-4 backdrop-blur-md shadow-sm">
+        <header className="shrink-0 rounded-xl border border-neutral-700/40 bg-neutral-800/40 p-4 backdrop-blur-md shadow-sm">
           {filters}
         </header>
 
