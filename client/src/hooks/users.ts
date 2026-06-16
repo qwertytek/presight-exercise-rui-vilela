@@ -19,7 +19,7 @@ interface UsersResponse {
   data: UserProps[];
 }
 
-export function getUsers({ limit = 0, page }: getUsersProps = {}) {
+export function useUsers({ limit = 0, page }: getUsersProps = {}) {
   const params = !limit && !page ? {} : { params: { limit, page: page || 1 } };
 
   return useQuery<UsersResponse>({
