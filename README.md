@@ -137,8 +137,6 @@ Each migration runs inside a transaction, ensuring that both the schema changes 
 
 This approach keeps the database layer simple, transparent, and fully under application control while providing reliable schema versioning.
 
-<img width="937" height="893" alt="Screenshot 2026-06-15 at 20 25 22" src="https://github.com/user-attachments/assets/863b8c77-e068-4e48-b041-f1c5a36afc28" />
-
 ### feature/setup-client
 
 #### Vite + React + Typescript
@@ -152,6 +150,47 @@ This approach keeps the monorepo root as the single source of truth for shared c
 Tailwind is chosen for this project to keep styling minimal, consistent, and low-overhead. It avoids the need for custom CSS architecture or additional styling abstractions, which would add unnecessary complexity for the current scope.
 
 More details: [tailwind docs](https://tailwindcss.com/)
+
+### feature/database-structure-and-seeds
+
+#### Database Structure
+
+Below is the diagram for how the database structure will be done.
+
+![Screenshot 2026-06-15 at 20 25 22](https://github.com/user-attachments/assets/863b8c77-e068-4e48-b041-f1c5a36afc28)
+
+##### Hobbies
+
+Hobbies are stored in a dedicated table and linked through an intermediary join table to support a many-to-many relationship between users and hobbies.
+
+This design allows:
+
+Reuse of hobby records across multiple users
+Normalized storage without duplication
+Flexible assignment of multiple hobbies per user
+Easier updates and consistency control across the dataset
+
+##### Nationality
+
+Nationality, like hobbies, deserves its own dedicated table to ensure data consistency and avoid duplication. This prevents issues such as inconsistent entries like “Portugal” vs “Portuguese”.
+
+By standardizing nationalities in a separate reference table, we ensure:
+
+Consistent spelling and formatting across the database
+Prevention of duplicate or ambiguous entries
+Easier maintenance and future scalability
+
+Unlike hobbies, nationality is modeled as a one-to-one relationship and therefore does not require an intermediary join table.
+
+#### Seeds
+
+Seed data was generated using publicly available datasets for both nationalities and hobbies to ensure realistic and standardized input values.
+
+For nationalities, the dataset is based on the [ISO 3166-1 alpha-2](https://gist.github.com/ssskip/5a94bfcd2835bf1dea52.) standard, retrieved in JSON format from. This provides a consistent and widely accepted reference for country codes and country names.
+
+For hobbies, a [public Kaggle](https://www.kaggle.com/datasets/mrhell/list-of-hobbies) dataset was used, available in CSV format. This dataset was used to populate a structured and diverse set of hobby entries.
+
+User data was artificially generated using AI, leveraging the nationality and hobby datasets to ensure consistent, realistic, and coherent relationships across all seeded records.
 
 ## Excercise Notes
 
