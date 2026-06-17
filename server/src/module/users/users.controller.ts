@@ -40,11 +40,32 @@ export const getUsersByNameQuery = async (req: Request, res: Response) => {
     });
   }
 
-  const rows = service.getUserByQueryName(query);
+  const data = service.getUserByQueryName(query);
 
   const response = {
-    data: rows,
+    data,
   };
 
   return res.json(response);
+};
+
+export const getFacetsByQuery = async (req: Request, res: Response) => {
+  const q = req.query.q;
+
+  if (Array.isArray(q)) {
+    return res.status(400).json({ error: 'Invalid query parameter' });
+  }
+
+  if (typeof q === 'string' && q.length > 200) {
+    return res.status(400).json({ error: 'Query parameter too long' });
+  }
+
+  const normalised = typeof q === 'string' && q.trim().length > 0 ? q.trim() : undefined;
+
+  try {
+    const result = service.getFacets(normalised);
+    return res.status(200).json(result);
+  } catch {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 };
