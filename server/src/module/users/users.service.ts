@@ -14,4 +14,8 @@ export class UserService {
   getUserByQueryName(query: string) {
     return this.repo.filterNames({ query });
   }
+
+  getFacets(query?: string) {
+    return this.repo.getFacets(query);
+  }
 }

@@ -47,3 +47,25 @@ export function useUsersByName(query: string) {
     enabled: query.trim().length > 0,
   });
 }
+
+export interface FacetItem {
+  label: string;
+  count: number;
+}
+
+export interface FacetsResponse {
+  hobbies: FacetItem[];
+  nationalities: FacetItem[];
+}
+
+export function useFacets(searchQuery: string) {
+  const trimmed = searchQuery.trim();
+  return useQuery<FacetsResponse>({
+    queryKey: ['facets', searchQuery],
+    queryFn: () =>
+      apiClient<FacetsResponse>(
+        'users/facets',
+        trimmed.length > 0 ? { params: { q: trimmed } } : {},
+      ),
+  });
+}

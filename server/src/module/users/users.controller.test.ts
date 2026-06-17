@@ -1,15 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
-import { listUsers, getUsersById, getUsersByNameQuery } from './users.controller';
+import { listUsers, getUsersById, getUsersByNameQuery, getFacetsByQuery } from './users.controller';
 
 // ---------------------------------------------------------------------------
 // Mock UserService — vi.hoisted ensures mocks are available inside vi.mock
 // ---------------------------------------------------------------------------
-const { mockList, mockGetById, mockGetUserByQueryName } = vi.hoisted(() => ({
+const { mockList, mockGetById, mockGetUserByQueryName, mockGetFacets } = vi.hoisted(() => ({
   mockList: vi.fn(),
   mockGetById: vi.fn(),
   mockGetUserByQueryName: vi.fn(),
+  mockGetFacets: vi.fn(),
 }));
 
 vi.mock('./users.service', () => {
@@ -17,10 +18,12 @@ vi.mock('./users.service', () => {
     list: typeof mockList;
     getById: typeof mockGetById;
     getUserByQueryName: typeof mockGetUserByQueryName;
+    getFacets: typeof mockGetFacets;
   }) {
     this.list = mockList;
     this.getById = mockGetById;
     this.getUserByQueryName = mockGetUserByQueryName;
+    this.getFacets = mockGetFacets;
   });
   return { UserService };
 });
@@ -34,6 +37,7 @@ const buildApp = () => {
   app.use(express.json());
   app.get('/api/users', listUsers);
   app.get('/api/users/filter-name', getUsersByNameQuery);
+  app.get('/api/users/facets', getFacetsByQuery);
   app.get('/api/users/:id', getUsersById);
 
   return app;
@@ -224,4 +228,124 @@ describe('GET /api/users/filter-name', () => {
 
     expect(res.headers['content-type']).toMatch(/application\/json/);
   });
+});
+
+// ---------------------------------------------------------------------------
+// Sub-task 3.1 — Unit tests for getFacetsByQuery
+// ---------------------------------------------------------------------------
+
+describe('GET /api/users/facets', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const fakeFacets = {
+    hobbies: [
+      { label: 'Reading', count: 5 },
+      { label: 'Cycling', count: 3 },
+    ],
+    nationalities: [
+      { label: 'Germany', count: 4 },
+      { label: 'Portugal', count: 2 },
+    ],
+  };
+
+  it('returns 200 with hobbies and nationalities arrays', async () => {
+    mockGetFacets.mockReturnValue(fakeFacets);
+
+    const res = await request(buildApp()).get('/api/users/facets');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(fakeFacets);
+    expect(res.body).toHaveProperty('hobbies');
+    expect(res.body).toHaveProperty('nationalities');
+    expect(Array.isArray(res.body.hobbies)).toBe(true);
+    expect(Array.isArray(res.body.nationalities)).toBe(true);
+  });
+
+  it('returns 400 when q is an array', async () => {
+    const res = await request(buildApp()).get('/api/users/facets?q=a&q=b');
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('error');
+  });
+
+  it('returns 400 when q is a 201-character string', async () => {
+    const longQ = 'a'.repeat(201);
+
+    const res = await request(buildApp()).get(`/api/users/facets?q=${longQ}`);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('error');
+  });
+
+  it('returns 500 when service throws', async () => {
+    mockGetFacets.mockImplementation(() => {
+      throw new Error('DB error');
+    });
+
+    const res = await request(buildApp()).get('/api/users/facets');
+
+    expect(res.status).toBe(500);
+    expect(res.body).toEqual({ error: 'Internal server error' });
+  });
+
+  it('calls service with undefined when no q param is provided', async () => {
+    mockGetFacets.mockReturnValue(fakeFacets);
+
+    await request(buildApp()).get('/api/users/facets');
+
+    expect(mockGetFacets).toHaveBeenCalledWith(undefined);
+  });
+
+  it('calls service with undefined when q is whitespace-only', async () => {
+    mockGetFacets.mockReturnValue(fakeFacets);
+
+    await request(buildApp()).get('/api/users/facets?q=%20%20%20');
+
+    expect(mockGetFacets).toHaveBeenCalledWith(undefined);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Sub-task 3.2 — Property-based tests for controller input validation
+// Feature: sidebar-facets, Property 5: Input validation rejects illegal q values
+// ---------------------------------------------------------------------------
+
+import fc from 'fast-check';
+
+describe('GET /api/users/facets — Property 5: Input validation rejects illegal q values', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('returns 400 for any string q longer than 200 characters', async () => {
+    // Property 5 — string variant
+    await fc.assert(
+      fc.asyncProperty(fc.string({ minLength: 201, maxLength: 400 }), async (longQ) => {
+        // Encode the string so it survives URL parsing as a single param
+        const encoded = encodeURIComponent(longQ);
+        const res = await request(buildApp()).get(`/api/users/facets?q=${encoded}`);
+        expect(res.status).toBe(400);
+        expect(res.body).toHaveProperty('error');
+      }),
+      { numRuns: 100 },
+    );
+  }, 30_000);
+
+  it('returns 400 for array-typed q params (repeated key)', async () => {
+    // Property 5 — array variant: generate 2–5 distinct values and send as repeated q params
+    await fc.assert(
+      fc.asyncProperty(
+        fc.array(fc.string({ minLength: 1, maxLength: 20 }), { minLength: 2, maxLength: 5 }),
+        async (values) => {
+          const qs = values.map((v) => `q=${encodeURIComponent(v)}`).join('&');
+          const res = await request(buildApp()).get(`/api/users/facets?${qs}`);
+          expect(res.status).toBe(400);
+          expect(res.body).toHaveProperty('error');
+        },
+      ),
+      { numRuns: 100 },
+    );
+  }, 30_000);
 });
